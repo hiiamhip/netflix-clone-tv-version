@@ -12,6 +12,7 @@ import Plus from 'vue-material-design-icons/Plus.vue';
 import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue';
 
 import MovieDetails from '@/components/MovieDetails.vue'
+import VideoCarousel from './components/VideoCarousel.vue';
 
 import { useMovieStore } from './stores/movie';
 import { storeToRefs } from 'pinia';
@@ -53,6 +54,7 @@ onMounted(() => {
 
     <div v-if="!showFullVideo">
       <div class="fixed flex z-20 top-0 right-0 w-full h-[50%] bg-black pl-[120px] bg-clip-border">
+        <div class="absolute z-30 h-[600px] left-[120px] w-[77%] right-0 top-0 bg-gradient-to-r from-black via-black"></div>
         <MovieDetails v-if="movie" :movie="movie" />
         <video
           v-if="movie"
@@ -64,6 +66,35 @@ onMounted(() => {
           >
         </video>
       </div>
+
+        <div class="fixed z-30 bottom-0 right-0 w-full h-[55%] pl-[120px] overflow-y-auto scrollbar-hidden">
+          <VideoCarousel class="pb-14 pt-14" category="Popular Movies" :movies="movies[0]" />
+          <VideoCarousel class="pb-14" category="Horror Movies" :movies="movies[1]" />
+          <VideoCarousel class="pb-32" category="Featured Movies" :movies="movies[2]" />
+        </div>
+    </div>
+      <div v-if="!showFullVideo" class="absolute z-20 h-[70%] left-[120px] w-[100%] right-0 bottom-0 bg-gradient-to-t from-black via-black"></div>
+    <div v-if="showFullVideo">
+      <div @click="showFullVideo = false" class="absolute z-50 p-2 m-4 bg-white bg-opacity-50 rounded-full cursor-pointer">
+        <ChevronLeft :size="40"/>
+      </div>
+      <video 
+        :src="'/videos/'+movie.name+'.mp4'" 
+        autoplay 
+        loop
+        controls
+        class="absolute z-0 w-[100vw] h-full object-fit"
+      >
+      </video>
     </div>
   </div>
 </template>
+
+<style scoped>
+  .scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
+</style>
