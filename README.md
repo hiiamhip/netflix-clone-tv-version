@@ -1,3 +1,6 @@
+
+![netflix-clone-tv-version](https://github.com/user-attachments/assets/8f5afbd7-1d55-40c7-933d-63ebfc340a97)
+
 # netflix-clone-using-vue
 
 This template should help get you started developing with Vue 3 in Vite.
