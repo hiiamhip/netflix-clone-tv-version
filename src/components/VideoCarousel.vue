@@ -21,15 +21,17 @@
         v-for="(slide, index) in movies"
         :key="slide"
         class="flex item-centers object-cover text-white bg-transparent"
+        v-slot="{ isActive }"
       >
         <div
-          @click="($event) => fullScreenVideo(index)"
+          @mousedown="handleMouseDown"
+          @mousemove="handleMouseMove"
+          @mouseup="handleMouseUp(index)"
           class="object-cover h-[100%] hover:brightness-125 cursor-pointer"
           :class="
             currentSlide !== index
               ? 'border-4 border-transparent'
-              : 'border-4 border-white',
-            currentSlideObject(slide, index)
+              : 'border-4 border-white'
           "
         >
           <img
@@ -37,6 +39,7 @@
             class="pointer-events-none h-[100%] z-[-1]"
             :src="'/images/' + slide.name + '.png'"
           />
+          <span v-if="isActive">{{ currentSlideObject(slide, index) }}</span>
         </div>
       </Slide>
       <template #addons>
@@ -59,6 +62,9 @@ const { movie, showFullVideo } = storeToRefs(useMovie);
 
 let currentSlide = ref(0);
 
+let startX, startY;
+let isDragging = ref(false);
+
 const props = defineProps({
   category: String,
   movies: Array,
@@ -71,9 +77,26 @@ const currentSlideObject = (slide, index) => {
   }
 };
 
+const handleMouseDown = (e) => {
+  startX = e.clientX;
+  startY = e.clientY;
+  isDragging.value = false;
+};
+
+const handleMouseMove = (e) => {
+  if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 20)
+  isDragging.value = true;
+};
+
+const handleMouseUp = (index) => {
+  if (!isDragging.value) {
+    fullScreenVideo(index);
+  }
+};
+
 const fullScreenVideo = (index) => {
   currentSlide.value = index;
-  setTimeout(() => (showFullVideo.value = true), 800);
+  setTimeout(() => (showFullVideo.value = true), 500);
 };
 </script>
 

@@ -21,5 +21,9 @@
 </template>
 
 <script setup>
-	defineProps({ movie: Object })
+	import { useMovieStore } from '../stores/movie';
+	import { storeToRefs } from 'pinia';
+
+	const useMovie = useMovieStore();
+	const { movie } = storeToRefs(useMovie);
 </script>
